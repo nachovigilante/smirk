@@ -50,11 +50,11 @@ def vertex_normals(vertices, faces):
     vertices_faces = vertices_faces.reshape(-1, 3, 3)
 
     normals.index_add_(0, faces[:, 1].long(), 
-                       torch.cross(vertices_faces[:, 2] - vertices_faces[:, 1], vertices_faces[:, 0] - vertices_faces[:, 1]))
+                       torch.cross(vertices_faces[:, 2] - vertices_faces[:, 1], vertices_faces[:, 0] - vertices_faces[:, 1], dim=-1))
     normals.index_add_(0, faces[:, 2].long(), 
-                       torch.cross(vertices_faces[:, 0] - vertices_faces[:, 2], vertices_faces[:, 1] - vertices_faces[:, 2]))
+                       torch.cross(vertices_faces[:, 0] - vertices_faces[:, 2], vertices_faces[:, 1] - vertices_faces[:, 2], dim=-1))
     normals.index_add_(0, faces[:, 0].long(),
-                       torch.cross(vertices_faces[:, 1] - vertices_faces[:, 0], vertices_faces[:, 2] - vertices_faces[:, 0]))
+                       torch.cross(vertices_faces[:, 1] - vertices_faces[:, 0], vertices_faces[:, 2] - vertices_faces[:, 0], dim=-1))
 
     normals = F.normalize(normals, eps=1e-6, dim=1)
     normals = normals.reshape((bs, nv, 3))
